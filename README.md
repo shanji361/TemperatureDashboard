@@ -6,7 +6,7 @@ Temperature Dashboard is an Android app built with Jetpack Compose that simulate
 
 ## Features
 
-- Simulates new temperature readings every **2 seconds** using **Kotlin coroutines**
+- Simulates new temperature readings every **2 seconds** 
 - Random temperature values between **65°F and 85°F**
 - Stores the **last 20 readings** in memory and updates the UI automatically
 - Displays:

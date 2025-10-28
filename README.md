@@ -30,5 +30,7 @@ Temperature Dashboard is an Android app built with Jetpack Compose that simulate
 ---
 
 ## Reference
-Based on **Lecture 4, Example 2** from the CS501 course materials.  
-Kotlin Documentation on StateFlow [https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/]
+- Based on **Lecture 4, Example 2** from the CS501 course materials.  
+- [Kotlin Documentation on StateFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/)
+- [Android Developers Documentation on ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [Android Developers Documentation on Canvas](https://developer.android.com/reference/android/graphics/Canvas)

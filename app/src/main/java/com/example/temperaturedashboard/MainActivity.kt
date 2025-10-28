@@ -20,6 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.temperaturedashboard.ui.theme.TemperatureDashboardTheme
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Path
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.geometry.Offset
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +77,14 @@ fun TemperatureDashboardScreen(
 
             // stats
             StatsSection(stats = state.stats)
-
+            if (state.readings.isNotEmpty()) {
+                TemperatureChart(
+                    readings = state.readings.map { it.temperature },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+            }
             // readings list
             Text(
                 text = "Recent Readings (Last 20)",
@@ -114,6 +126,54 @@ fun ControlButtons(
         }
     }
 }
+
+@Composable
+fun TemperatureChart(readings: List<Float>,
+                     modifier: Modifier = Modifier ) {
+    Canvas(modifier = Modifier
+        .fillMaxWidth()
+        .height(200.dp)
+        .padding(16.dp)
+    ) {
+        if (readings.isEmpty()) return@Canvas
+
+        val minTemp = readings.minOrNull() ?: 0f
+        val maxTemp = readings.maxOrNull() ?: 1f
+        val tempRange = maxTemp - minTemp
+        val width = size.width
+        val height = size.height
+        val spacing = width / (readings.size - 1).coerceAtLeast(1)
+
+        val axisColor = Color.Gray
+        val strokeWidth = 2f
+
+        // Y-axis
+        drawLine(
+            color = axisColor,
+            start = Offset(0f, 0f),
+            end = Offset(0f, height),
+            strokeWidth = strokeWidth
+        )
+
+        // X-axis
+        drawLine(
+            color = axisColor,
+            start = Offset(0f, height),
+            end = Offset(width, height),
+            strokeWidth = strokeWidth
+        )
+        val path = Path()
+        readings.forEachIndexed { index, temp ->
+            val x = index * spacing
+            val normalized = (temp - minTemp) / tempRange
+            val y = height - (normalized * height)
+            if (index == 0) path.moveTo(x, y) else path.lineTo(x, y)
+        }
+
+        drawPath(path, color = Color.Blue, style = Stroke(width = 3f))
+    }
+}
+
 
 @Composable
 fun StatsSection(stats: TemperatureStats) {

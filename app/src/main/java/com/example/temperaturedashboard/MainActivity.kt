@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.Path
 import androidx.compose.foundation.Canvas
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.nativeCanvas
 
 
 class MainActivity : ComponentActivity() {
@@ -138,7 +139,7 @@ fun TemperatureChart(readings: List<Float>,
         if (readings.isEmpty()) return@Canvas
 
         val minTemp = readings.minOrNull() ?: 0f
-        val maxTemp = readings.maxOrNull() ?: 1f
+        val maxTemp = readings.maxOrNull() ?: 0f
         val tempRange = maxTemp - minTemp
         val width = size.width
         val height = size.height
@@ -171,6 +172,35 @@ fun TemperatureChart(readings: List<Float>,
         }
 
         drawPath(path, color = Color.Blue, style = Stroke(width = 3f))
+        val textPaint = android.graphics.Paint().apply {
+            color = android.graphics.Color.DKGRAY
+            textSize = 24f
+        }
+
+        // X-axis labels
+        for (i in 0 until readings.size step (readings.size / 5).coerceAtLeast(1)) {
+            val x = i * spacing
+            drawContext.canvas.nativeCanvas.drawText(
+                i.toString(),
+                x,
+                height + 30f,
+                textPaint
+            )
+        }
+
+        // Y-axis labels
+
+
+        listOf(65f, 75f, 85f).forEach { label ->
+            val normalized = (label - 65f) / (85f - 65f)
+            val y = height - (normalized * height)
+            drawContext.canvas.nativeCanvas.drawText(
+                label.toInt().toString(),
+                -40f,
+                y + 8f, // adjust alignment
+                textPaint
+            )
+        }
     }
 }
 
